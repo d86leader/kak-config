@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+# Run kak in zelllij. Supports tabs
+
+if __name__ == "__main__":
+    import os
+    import subprocess
+    import sys
+    import tempfile
+
+    template = """
+layout {
+  pane size=1 borderless=true {
+    plugin location="zellij:tab-bar"
+  }
+  pane command="kak"%s
+  pane size=1 borderless=true {
+    plugin location="zellij:status-bar"
+  }
+}
+    """
+
+    home = os.getenv("HOME")
+    zellij_conf = home + "/.config/zellij-kak/config.kdl"
+
+    session_id = None
+    args = None
+    if len(sys.argv) > 1 and sys.argv[1] == "__kaj_newtab":
+        session_id = sys.argv[2]
+        args = sys.argv[3:]
+    else:
+        args = sys.argv[1:]
+
+    content = None
+    if len(args) == 0:
+        content = template % ""
+    else:
+        argstr = " { args " + " ".join('"' + arg + '"' for arg in args) + "; }"
+        content = template % argstr
+
+    with tempfile.NamedTemporaryFile("w") as file:
+        file.write(content)
+        file.flush()
+
+        if session_id is None:
+            subprocess.run(["zellij", "-c", zellij_conf, "-l", file.name])
+        else:
+            subprocess.run(["zellij", "--session", session_id, "action", "new-tab", "--layout", file.name])
