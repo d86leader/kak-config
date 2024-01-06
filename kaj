@@ -13,9 +13,10 @@ layout {
   pane size=1 borderless=true {
     plugin location="zellij:tab-bar"
   }
-  pane command="kak"%s
-  pane size=1 borderless=true {
-    plugin location="zellij:status-bar"
+  pane {
+    command "kak"
+    close_on_exit true
+    %s
   }
 }
     """
@@ -35,7 +36,7 @@ layout {
     if len(args) == 0:
         content = template % ""
     else:
-        argstr = " { args " + " ".join('"' + arg + '"' for arg in args) + "; }"
+        argstr = "args " + " ".join('"' + arg + '"' for arg in args)
         content = template % argstr
 
     with tempfile.NamedTemporaryFile("w") as file:
