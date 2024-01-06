@@ -21,7 +21,7 @@ layout {
     """
 
     home = os.getenv("HOME")
-    zellij_conf = home + "/.config/zellij-kak/config.kdl"
+    zellij_conf = home + "/.config/kak/zellij/config.kdl"
 
     session_id = None
     args = None
