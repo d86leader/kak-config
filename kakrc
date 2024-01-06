@@ -9,8 +9,8 @@ set-option global ui_options terminal_set_title=no terminal_assistant=none
 add-highlighter global/ number-lines -relative
 # highlight matching parens
 add-highlighter global/match_brackets show-matching
-# show endline character (waiting until only-trailing releases) (ugly)
-# add-highlighter global/ show-whitespaces -lf ¬ -tab ' ' -spc ' ' -tabpad ' '
+# show tab character
+add-highlighter global/ show-whitespaces -lf ' ' -tab '▷' -spc ' ' -tabpad ' '
 
 
 map -docstring 'Exit insert mode' global insert <c-[> <esc>
@@ -26,3 +26,10 @@ evaluate-commands %sh{
     }
     autoload_directory ${kak_config}/sourced
 }
+
+
+source %sh{echo ${kak_config}/plugin/langmap/langmap.kak}
+require-module langmap
+set-option global langmap %opt{langmap_ru_jcuken}
+map -docstring "toggle layout" global normal '<c-space>' ':toggle-langmap<ret>'
+map -docstring "toggle layout" global insert '<c-space>' '<a-;>:toggle-langmap<ret>'
